@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "SnapApp",
+    "slug": "snapapp",
+    "scheme": "snapapp",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow SnapApp to access your camera to scan food."
+        }
+      ]
+    ]
+  }
+}
+
+
