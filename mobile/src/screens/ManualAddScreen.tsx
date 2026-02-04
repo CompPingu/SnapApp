@@ -1,7 +1,12 @@
 import React from "react";
-import { Alert, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { addMealManual } from "../api/client";
+import { Screen } from "../ui/Screen";
+import { Card } from "../ui/Card";
+import { PrimaryButton } from "../ui/Button";
+import { theme } from "../ui/theme";
 
 export function ManualAddScreen() {
   const [name, setName] = React.useState("");
@@ -34,66 +39,92 @@ export function ManualAddScreen() {
   }, [name, calories, protein]);
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.container}>
-      <Text style={styles.title}>Log a meal</Text>
+    <Screen>
+      <LinearGradient
+        colors={["rgba(124,58,237,0.40)", "rgba(59,130,246,0.18)", "rgba(15,23,42,0.0)"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.headerGlow}
+      />
 
-      <Text style={styles.label}>Food name</Text>
-      <TextInput value={name} onChangeText={setName} placeholder="e.g., oatmeal" style={styles.input} />
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.container}>
+        <Text style={styles.title}>Manual log</Text>
+        <Text style={styles.subtitle}>Quick add when you already know the macros.</Text>
 
-      <View style={styles.row}>
-        <View style={styles.flex}>
-          <Text style={styles.label}>Calories</Text>
+        <Card style={styles.formCard} strong>
+          <Text style={styles.label}>Food name</Text>
           <TextInput
-            value={calories}
-            onChangeText={setCalories}
-            placeholder="0"
-            keyboardType="numeric"
+            value={name}
+            onChangeText={setName}
+            placeholder="e.g., oatmeal"
+            placeholderTextColor="rgba(230,234,242,0.45)"
             style={styles.input}
           />
-        </View>
-        <View style={styles.gap} />
-        <View style={styles.flex}>
-          <Text style={styles.label}>Protein (g)</Text>
-          <TextInput
-            value={protein}
-            onChangeText={setProtein}
-            placeholder="0"
-            keyboardType="numeric"
-            style={styles.input}
-          />
-        </View>
-      </View>
 
-      <Pressable disabled={busy} onPress={submit} style={[styles.button, busy && styles.buttonDisabled]}>
-        <Text style={styles.buttonText}>{busy ? "Saving..." : "Save"}</Text>
-      </Pressable>
+          <View style={styles.row}>
+            <View style={styles.flex}>
+              <Text style={styles.label}>Calories</Text>
+              <TextInput
+                value={calories}
+                onChangeText={setCalories}
+                placeholder="0"
+                placeholderTextColor="rgba(230,234,242,0.45)"
+                keyboardType="numeric"
+                style={styles.input}
+              />
+            </View>
+            <View style={styles.gap} />
+            <View style={styles.flex}>
+              <Text style={styles.label}>Protein (g)</Text>
+              <TextInput
+                value={protein}
+                onChangeText={setProtein}
+                placeholder="0"
+                placeholderTextColor="rgba(230,234,242,0.45)"
+                keyboardType="numeric"
+                style={styles.input}
+              />
+            </View>
+          </View>
 
-      <Text style={styles.help}>
-        Tip: if you want accurate numbers automatically, use the Scan screen (image → backend → USDA lookup).
-      </Text>
-    </KeyboardAvoidingView>
+          <PrimaryButton title={busy ? "Saving..." : "Save"} onPress={submit} disabled={busy} style={styles.btn} />
+
+          <Text style={styles.help}>
+            Tip: for automatic nutrition, use Scan (image → backend → USDA lookup).
+          </Text>
+        </Card>
+      </KeyboardAvoidingView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", padding: 16 },
-  title: { fontSize: 20, fontWeight: "800", marginBottom: 14 },
-  label: { marginTop: 10, marginBottom: 6, fontWeight: "700", color: "#333" },
+  headerGlow: {
+    position: "absolute",
+    top: -110,
+    left: -70,
+    right: -70,
+    height: 240
+  },
+  container: { flex: 1, padding: theme.spacing.md },
+  title: { fontSize: 24, fontWeight: "900", color: theme.colors.text, marginTop: 6 },
+  subtitle: { marginTop: 6, color: theme.colors.textMuted, fontWeight: "700" },
+  formCard: { marginTop: 14, ...theme.shadow },
+  label: { marginTop: 12, marginBottom: 6, fontWeight: "800", color: theme.colors.text },
   input: {
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: "#ccc",
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    backgroundColor: "#fafafa"
+    borderColor: theme.colors.border,
+    borderRadius: theme.radius.md,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    backgroundColor: "rgba(0,0,0,0.14)",
+    color: theme.colors.text
   },
   row: { flexDirection: "row", marginTop: 6 },
   flex: { flex: 1 },
   gap: { width: 12 },
-  button: { marginTop: 18, paddingVertical: 14, borderRadius: 14, backgroundColor: "#111", alignItems: "center" },
-  buttonDisabled: { opacity: 0.7 },
-  buttonText: { color: "#fff", fontSize: 16, fontWeight: "800" },
-  help: { marginTop: 14, color: "#666", lineHeight: 18 }
+  btn: { marginTop: 18 },
+  help: { marginTop: 12, color: theme.colors.textMuted, lineHeight: 18, fontWeight: "600" }
 });
 
 

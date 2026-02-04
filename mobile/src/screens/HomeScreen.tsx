@@ -1,10 +1,14 @@
 import React from "react";
 import { ActivityIndicator, Alert, FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { fetchToday, deleteMeal } from "../api/client";
 import type { Meal, TodayResponse } from "../api/types";
 import { MealListItem } from "../components/MealListItem";
+import { Screen } from "../ui/Screen";
+import { Card } from "../ui/Card";
+import { theme } from "../ui/theme";
 
 export function HomeScreen() {
   const [data, setData] = React.useState<TodayResponse | null>(null);
@@ -70,10 +74,10 @@ export function HomeScreen() {
 
   if (loading && !data) {
     return (
-      <View style={styles.center}>
-        <ActivityIndicator />
+      <Screen style={styles.center}>
+        <ActivityIndicator color={theme.colors.text} />
         <Text style={styles.hint}>Loading today...</Text>
-      </View>
+      </Screen>
     );
   }
 
@@ -81,53 +85,89 @@ export function HomeScreen() {
   const meals: Meal[] = data?.meals || [];
 
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.dateText}>Today</Text>
+    <Screen>
+      <LinearGradient
+        colors={["rgba(124,58,237,0.55)", "rgba(34,197,94,0.18)", "rgba(15,23,42,0.0)"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.headerGlow}
+      />
+
+      <Card style={styles.hero} strong>
+        <Text style={styles.kicker}>Today</Text>
+        <Text style={styles.heroTitle}>Calories & Protein</Text>
+
         <View style={styles.metrics}>
-          <View style={styles.metric}>
+          <View style={styles.metricPill}>
             <Text style={styles.metricValue}>{Math.round(totals.calories)}</Text>
             <Text style={styles.metricLabel}>kcal</Text>
           </View>
-          <View style={styles.metric}>
+          <View style={styles.metricPill}>
             <Text style={styles.metricValue}>{Math.round(totals.protein)}</Text>
             <Text style={styles.metricLabel}>protein (g)</Text>
           </View>
         </View>
+      </Card>
+
+      <View style={styles.sectionRow}>
+        <Text style={styles.sectionTitle}>Meals</Text>
+        <Text style={styles.sectionHint}>{meals.length} logged</Text>
       </View>
 
-      <Text style={styles.sectionTitle}>Meals</Text>
       <FlatList
         data={meals}
         keyExtractor={(m) => m.id}
         renderItem={({ item }) => <MealListItem meal={item} onDelete={onDelete} />}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.colors.text} />
+        }
         ListEmptyComponent={<Text style={styles.empty}>No meals yet. Add one manually or scan food.</Text>}
-        contentContainerStyle={meals.length ? undefined : { padding: 12 }}
+        contentContainerStyle={meals.length ? { paddingBottom: 18 } : { padding: 16 }}
+        showsVerticalScrollIndicator={false}
       />
-    </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
-  center: { flex: 1, alignItems: "center", justifyContent: "center" },
-  hint: { marginTop: 10, color: "#555" },
-  card: {
-    margin: 12,
-    padding: 16,
-    borderRadius: 16,
-    backgroundColor: "#f6f7fb",
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: "#e5e7ef"
+  center: { alignItems: "center", justifyContent: "center" },
+  hint: { marginTop: 10, color: theme.colors.textMuted },
+  headerGlow: {
+    position: "absolute",
+    top: -120,
+    left: -80,
+    right: -80,
+    height: 260
   },
-  dateText: { fontSize: 16, fontWeight: "700" },
-  metrics: { flexDirection: "row", gap: 18, marginTop: 12 },
-  metric: { flex: 1, padding: 12, borderRadius: 12, backgroundColor: "#fff" },
-  metricValue: { fontSize: 28, fontWeight: "800" },
-  metricLabel: { marginTop: 2, color: "#666" },
-  sectionTitle: { marginLeft: 12, marginTop: 4, marginBottom: 6, fontWeight: "700", color: "#333" },
-  empty: { color: "#666" }
+  hero: {
+    marginTop: theme.spacing.md,
+    marginHorizontal: theme.spacing.md,
+    ...theme.shadow
+  },
+  kicker: { color: theme.colors.textMuted, fontWeight: "700", letterSpacing: 0.3 },
+  heroTitle: { marginTop: 2, color: theme.colors.text, fontSize: 22, fontWeight: "900" },
+  metrics: { flexDirection: "row", gap: 12, marginTop: 14 },
+  metricPill: {
+    flex: 1,
+    borderRadius: theme.radius.lg,
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+    backgroundColor: "rgba(0,0,0,0.12)",
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: theme.colors.border
+  },
+  metricValue: { color: theme.colors.text, fontSize: 30, fontWeight: "900" },
+  metricLabel: { marginTop: 2, color: theme.colors.textMuted, fontWeight: "700" },
+  sectionRow: {
+    marginTop: 14,
+    marginHorizontal: theme.spacing.md,
+    marginBottom: 6,
+    flexDirection: "row",
+    alignItems: "baseline"
+  },
+  sectionTitle: { flex: 1, fontWeight: "900", color: theme.colors.text, fontSize: 16 },
+  sectionHint: { color: theme.colors.textMuted, fontWeight: "700" },
+  empty: { color: theme.colors.textMuted }
 });
 
 

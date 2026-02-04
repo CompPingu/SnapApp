@@ -3,8 +3,14 @@ import { Alert, ActivityIndicator, Pressable, StyleSheet, Text, View } from "rea
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as ImageManipulator from "expo-image-manipulator";
 import { useIsFocused } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
 
 import { scanFoodImage } from "../api/client";
+import { Screen } from "../ui/Screen";
+import { Card } from "../ui/Card";
+import { PrimaryButton } from "../ui/Button";
+import { theme } from "../ui/theme";
 
 export function ScanFoodScreen() {
   const isFocused = useIsFocused();
@@ -48,21 +54,19 @@ export function ScanFoodScreen() {
 
   if (!permission) {
     return (
-      <View style={styles.center}>
-        <ActivityIndicator />
-      </View>
+      <Screen style={styles.center}>
+        <ActivityIndicator color={theme.colors.text} />
+      </Screen>
     );
   }
 
   if (!permission.granted) {
     return (
-      <View style={styles.center}>
+      <Screen style={styles.center}>
         <Text style={styles.title}>Camera permission needed</Text>
         <Text style={styles.subtitle}>Grant permission to scan food using your camera.</Text>
-        <Pressable onPress={() => requestPermission()} style={styles.primaryBtn}>
-          <Text style={styles.primaryBtnText}>Grant permission</Text>
-        </Pressable>
-      </View>
+        <PrimaryButton title="Grant permission" onPress={() => requestPermission()} style={styles.primaryBtn} />
+      </Screen>
     );
   }
 
@@ -74,13 +78,27 @@ export function ScanFoodScreen() {
         <View style={styles.cameraPlaceholder} />
       )}
 
+      {/* Top gradient vignette */}
+      <LinearGradient colors={["rgba(0,0,0,0.65)", "rgba(0,0,0,0)"]} style={styles.topFade} />
+      {/* Bottom gradient for readability */}
+      <LinearGradient colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.78)"]} style={styles.bottomFade} />
+
       <View style={styles.bottomPanel}>
-        <Pressable disabled={busy} onPress={takeAndUpload} style={[styles.captureBtn, busy && styles.captureBtnDisabled]}>
-          <Text style={styles.captureText}>{busy ? "Uploading..." : "Capture & Log"}</Text>
+        <Pressable
+          disabled={busy}
+          onPress={takeAndUpload}
+          style={[styles.captureCircle, busy && styles.captureCircleDisabled]}
+        >
+          {busy ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Ionicons name="camera" size={26} color="#fff" />
+          )}
         </Pressable>
+        <Text style={styles.captureText}>{busy ? "Uploading..." : "Tap to capture & log"}</Text>
 
         {lastResult?.meal ? (
-          <View style={styles.result}>
+          <Card style={styles.result} strong>
             <Text style={styles.resultTitle}>Last scan</Text>
             <Text style={styles.resultText}>
               {lastResult.meal.name} · {lastResult.meal.calories} kcal · {lastResult.meal.protein} g protein
@@ -90,7 +108,7 @@ export function ScanFoodScreen() {
                 Nutrition lookup failed (USDA key missing?). Meal saved with 0s. See backend console / set `USDA_API_KEY`.
               </Text>
             ) : null}
-          </View>
+          </Card>
         ) : (
           <Text style={styles.tip}>
             Tip: this project’s “vision” step is a free stub by default. It will still save a meal; you can plug in a real
@@ -106,28 +124,40 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#000" },
   camera: { flex: 1 },
   cameraPlaceholder: { flex: 1, backgroundColor: "#000" },
+  topFade: { position: "absolute", left: 0, right: 0, top: 0, height: 160 },
+  bottomFade: { position: "absolute", left: 0, right: 0, bottom: 0, height: 260 },
   bottomPanel: {
-    padding: 12,
-    backgroundColor: "#111"
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingHorizontal: theme.spacing.md,
+    paddingBottom: theme.spacing.lg,
+    paddingTop: theme.spacing.sm
   },
-  captureBtn: {
+  captureCircle: {
+    alignSelf: "center",
+    width: 76,
+    height: 76,
+    borderRadius: 38,
+    backgroundColor: "rgba(124,58,237,0.92)",
+    borderWidth: 2,
+    borderColor: "rgba(255,255,255,0.55)",
     alignItems: "center",
-    paddingVertical: 14,
-    borderRadius: 14,
-    backgroundColor: "#3b82f6"
+    justifyContent: "center",
+    ...theme.shadow
   },
-  captureBtnDisabled: { opacity: 0.7 },
-  captureText: { color: "#fff", fontSize: 16, fontWeight: "700" },
-  result: { marginTop: 10, padding: 12, backgroundColor: "#1b1b1b", borderRadius: 12 },
-  resultTitle: { color: "#fff", fontWeight: "700" },
-  resultText: { marginTop: 4, color: "#ddd" },
-  warn: { marginTop: 6, color: "#fbbf24" },
-  tip: { marginTop: 10, color: "#bbb", lineHeight: 18 },
-  center: { flex: 1, backgroundColor: "#fff", alignItems: "center", justifyContent: "center", padding: 18 },
-  title: { fontSize: 18, fontWeight: "800" },
-  subtitle: { marginTop: 8, color: "#555", textAlign: "center" },
-  primaryBtn: { marginTop: 14, paddingVertical: 12, paddingHorizontal: 14, backgroundColor: "#3b82f6", borderRadius: 12 },
-  primaryBtnText: { color: "#fff", fontWeight: "700" }
+  captureCircleDisabled: { opacity: 0.7 },
+  captureText: { marginTop: 10, color: theme.colors.text, fontSize: 15, fontWeight: "800", textAlign: "center" },
+  result: { marginTop: 12, ...theme.shadow },
+  resultTitle: { color: theme.colors.text, fontWeight: "900" },
+  resultText: { marginTop: 6, color: theme.colors.textMuted, fontWeight: "700" },
+  warn: { marginTop: 8, color: theme.colors.warning, fontWeight: "700" },
+  tip: { marginTop: 12, color: "rgba(230,234,242,0.80)", lineHeight: 18, fontWeight: "600" },
+  center: { alignItems: "center", justifyContent: "center", padding: 18 },
+  title: { fontSize: 20, fontWeight: "900", color: theme.colors.text },
+  subtitle: { marginTop: 8, color: theme.colors.textMuted, textAlign: "center", fontWeight: "700" },
+  primaryBtn: { marginTop: 14, width: "100%" }
 });
 
 
