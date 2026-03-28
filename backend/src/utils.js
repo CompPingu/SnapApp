@@ -20,9 +20,11 @@ function sumMeals(meals) {
     (acc, m) => {
       acc.calories += Number(m.calories || 0);
       acc.protein += Number(m.protein || 0);
+      acc.carbs += Number(m.carbs || 0);
+      acc.fat += Number(m.fat || 0);
       return acc;
     },
-    { calories: 0, protein: 0 }
+    { calories: 0, protein: 0, carbs: 0, fat: 0 }
   );
 }
 
@@ -32,5 +34,3 @@ module.exports = {
   isWithinISO,
   sumMeals
 };
-
-

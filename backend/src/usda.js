@@ -8,7 +8,7 @@
 
 const USDA_BASE = "https://api.nal.usda.gov/fdc/v1";
 
-function pickCaloriesAndProteinFromFdcFood(food) {
+function pickNutrientsFromFdcFood(food) {
   const nutrients = food?.foodNutrients || [];
   const byName = new Map(
     nutrients
@@ -24,9 +24,23 @@ function pickCaloriesAndProteinFromFdcFood(food) {
 
   const protein = byName.get("protein")?.value ?? null;
 
+  const carbs =
+    byName.get("carbohydrate, by difference")?.value ??
+    byName.get("carbohydrates")?.value ??
+    byName.get("total carbohydrate")?.value ??
+    null;
+
+  const fat =
+    byName.get("total lipid (fat)")?.value ??
+    byName.get("fat")?.value ??
+    byName.get("total fat")?.value ??
+    null;
+
   return {
     calories: typeof calories === "number" ? calories : null,
-    protein: typeof protein === "number" ? protein : null
+    protein: typeof protein === "number" ? protein : null,
+    carbs: typeof carbs === "number" ? carbs : null,
+    fat: typeof fat === "number" ? fat : null
   };
 }
 
@@ -54,14 +68,16 @@ async function getNutritionForFoodName({ apiKey, foodName }) {
   const foods = results?.foods || [];
   const best = foods[0];
   if (!best) {
-    return { calories: null, protein: null, source: "usda", note: "No match found" };
+    return { calories: null, protein: null, carbs: null, fat: null, source: "usda", note: "No match found" };
   }
 
-  const { calories, protein } = pickCaloriesAndProteinFromFdcFood(best);
+  const { calories, protein, carbs, fat } = pickNutrientsFromFdcFood(best);
 
   return {
     calories,
     protein,
+    carbs,
+    fat,
     source: "usda",
     fdcId: best.fdcId,
     description: best.description
@@ -71,5 +87,3 @@ async function getNutritionForFoodName({ apiKey, foodName }) {
 module.exports = {
   getNutritionForFoodName
 };
-
-

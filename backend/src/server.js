@@ -7,7 +7,7 @@ const path = require("path");
 const fs = require("fs/promises");
 const { randomUUID } = require("crypto");
 
-const { addMeal, readMeals, deleteMeal } = require("./storage");
+const { addMeal, readMeals, deleteMeal, updateMeal, readGoals, writeGoals } = require("./storage");
 const { recognizeFoodFromImage } = require("./vision");
 const { getNutritionForFoodName } = require("./usda");
 const { startOfLocalDayISO, endOfLocalDayISO, isWithinISO, sumMeals } = require("./utils");
@@ -38,12 +38,33 @@ const upload = multer({
       cb(null, `${id}${safeExt}`);
     }
   }),
-  limits: { fileSize: 8 * 1024 * 1024 } // 8MB
+  limits: { fileSize: 8 * 1024 * 1024 }
 });
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
 app.use("/uploads", express.static(UPLOADS_DIR));
+
+// --- Goals ---
+
+app.get("/api/goals", async (_req, res) => {
+  const goals = await readGoals();
+  res.json(goals);
+});
+
+app.put("/api/goals", async (req, res) => {
+  const { calories, protein, carbs, fat } = req.body || {};
+  const goals = {
+    calories: Number(calories || 2000),
+    protein: Number(protein || 150),
+    carbs: Number(carbs || 250),
+    fat: Number(fat || 65)
+  };
+  await writeGoals(goals);
+  res.json(goals);
+});
+
+// --- Today ---
 
 app.get("/api/today", async (_req, res) => {
   const { meals } = await readMeals();
@@ -51,8 +72,11 @@ app.get("/api/today", async (_req, res) => {
   const end = endOfLocalDayISO();
   const todayMeals = meals.filter((m) => isWithinISO(m.timestamp, start, end));
   const totals = sumMeals(todayMeals);
-  res.json({ date: start.slice(0, 10), totals, meals: todayMeals });
+  const goals = await readGoals();
+  res.json({ date: start.slice(0, 10), totals, meals: todayMeals, goals });
 });
+
+// --- History ---
 
 app.get("/api/history", async (req, res) => {
   const days = Number(req.query.days || 14);
@@ -67,18 +91,22 @@ app.get("/api/history", async (req, res) => {
   const byDate = {};
   for (const m of filtered) {
     const date = m.timestamp.slice(0, 10);
-    if (!byDate[date]) byDate[date] = { date, totals: { calories: 0, protein: 0 }, meals: [] };
+    if (!byDate[date]) byDate[date] = { date, totals: { calories: 0, protein: 0, carbs: 0, fat: 0 }, meals: [] };
     byDate[date].meals.push(m);
     byDate[date].totals.calories += Number(m.calories || 0);
     byDate[date].totals.protein += Number(m.protein || 0);
+    byDate[date].totals.carbs += Number(m.carbs || 0);
+    byDate[date].totals.fat += Number(m.fat || 0);
   }
 
   const items = Object.values(byDate).sort((a, b) => (a.date < b.date ? 1 : -1));
   res.json({ days, items });
 });
 
+// --- Meals CRUD ---
+
 app.post("/api/meals", async (req, res) => {
-  const { name, calories, protein, timestamp } = req.body || {};
+  const { name, calories, protein, carbs, fat, timestamp } = req.body || {};
   if (!name) return res.status(400).json({ error: "name is required" });
   const meal = {
     id: randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`,
@@ -86,9 +114,25 @@ app.post("/api/meals", async (req, res) => {
     name: String(name),
     calories: Number(calories || 0),
     protein: Number(protein || 0),
+    carbs: Number(carbs || 0),
+    fat: Number(fat || 0),
     source: "manual"
   };
   await addMeal(meal);
+  res.json({ meal });
+});
+
+app.patch("/api/meals/:id", async (req, res) => {
+  const { name, calories, protein, carbs, fat } = req.body || {};
+  const updates = {};
+  if (name !== undefined) updates.name = String(name);
+  if (calories !== undefined) updates.calories = Number(calories);
+  if (protein !== undefined) updates.protein = Number(protein);
+  if (carbs !== undefined) updates.carbs = Number(carbs);
+  if (fat !== undefined) updates.fat = Number(fat);
+
+  const meal = await updateMeal(req.params.id, updates);
+  if (!meal) return res.status(404).json({ error: "meal not found" });
   res.json({ meal });
 });
 
@@ -97,50 +141,47 @@ app.delete("/api/meals/:id", async (req, res) => {
   res.json({ ok });
 });
 
+// --- Scan ---
+
 app.post("/api/scan", upload.single("image"), async (req, res) => {
   if (!req.file?.path) return res.status(400).json({ error: "image file is required (field name: image)" });
 
   const imagePath = req.file.path;
   const vision = await recognizeFoodFromImage({ imagePath });
 
-  let nutrition = { calories: null, protein: null, source: "usda" };
-  let nutritionError = null;
+  let { calories, protein, carbs, fat } = vision;
 
-  try {
-    nutrition = await getNutritionForFoodName({ apiKey: USDA_API_KEY, foodName: vision.foodName });
-  } catch (e) {
-    nutritionError = e?.message || String(e);
+  // If the vision provider only identified the name (HF/stub), look up nutrition via USDA
+  if (vision.needsNutritionLookup && USDA_API_KEY) {
+    try {
+      const nutrition = await getNutritionForFoodName({ apiKey: USDA_API_KEY, foodName: vision.foodName });
+      calories = nutrition.calories ?? 0;
+      protein = nutrition.protein ?? 0;
+      carbs = nutrition.carbs ?? 0;
+      fat = nutrition.fat ?? 0;
+    } catch (e) {
+      console.warn("USDA lookup failed:", e?.message);
+    }
   }
 
   const meal = {
     id: randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`,
     timestamp: new Date().toISOString(),
     name: vision.foodName,
-    calories: nutrition.calories ?? 0,
-    protein: nutrition.protein ?? 0,
+    calories: calories ?? 0,
+    protein: protein ?? 0,
+    carbs: carbs ?? 0,
+    fat: fat ?? 0,
     source: "scan",
     image: `/uploads/${path.basename(imagePath)}`,
-    meta: {
-      vision,
-      nutrition: nutritionError ? { error: nutritionError } : nutrition
-    }
+    meta: { vision }
   };
 
   await addMeal(meal);
 
-  res.json({
-    meal,
-    debug: {
-      vision,
-      nutrition,
-      nutritionError
-    }
-  });
+  res.json({ meal, debug: { vision } });
 });
 
 app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
   console.log(`Backend listening on http://localhost:${PORT}`);
 });
-
-

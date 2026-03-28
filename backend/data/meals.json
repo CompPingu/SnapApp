@@ -1,6 +1,141 @@
 {
   "meals": [
     {
+      "id": "dae83170-7446-4ba0-8d25-9a857f73d75b",
+      "timestamp": "2026-03-28T00:26:27.477Z",
+      "name": "Unknown food",
+      "calories": 0,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0,
+      "source": "scan",
+      "image": "/uploads/06f49fb6-4fb5-4823-be36-28dd9180cd8a.jpg",
+      "meta": {
+        "vision": {
+          "foodName": "Unknown food",
+          "calories": 0,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "provider": "stub"
+        }
+      }
+    },
+    {
+      "id": "362c11aa-121d-4250-bda9-0fe3625cab1c",
+      "timestamp": "2026-03-27T23:42:10.315Z",
+      "name": "Eggs",
+      "calories": 200,
+      "protein": 16,
+      "carbs": 0,
+      "fat": 55,
+      "source": "scan",
+      "image": "/uploads/58b79f5b-4731-4087-9638-5bcb7602eb32.jpg",
+      "meta": {
+        "vision": {
+          "foodName": "Unknown food",
+          "calories": 0,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "provider": "stub"
+        }
+      }
+    },
+    {
+      "id": "1c852605-d7dd-4aee-bd52-fe5b74546748",
+      "timestamp": "2026-03-27T23:37:57.431Z",
+      "name": "Unknown food",
+      "calories": 0,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0,
+      "source": "scan",
+      "image": "/uploads/900b7393-ac33-4cf4-bdfa-d8c7d82641d8.jpg",
+      "meta": {
+        "vision": {
+          "foodName": "Unknown food",
+          "calories": 0,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "provider": "stub"
+        }
+      }
+    },
+    {
+      "id": "ebadd95b-5424-454a-b1f7-5cac1ca1e92e",
+      "timestamp": "2026-03-27T23:29:31.115Z",
+      "name": "apple",
+      "calories": 0,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0,
+      "source": "scan",
+      "image": "/uploads/b3058802-4ffe-4fda-9898-4c4257610ee5.jpg",
+      "meta": {
+        "vision": {
+          "foodName": "apple",
+          "confidence": 0.2,
+          "provider": "stub"
+        },
+        "nutrition": {
+          "error": "USDA search failed (403): {\n  \"error\": {\n    \"code\": \"API_KEY_INVALID\",\n    \"message\": \"An invalid api_key was supplied. Get one at https://api.nal.usda.gov:443\"\n  }\n}"
+        }
+      }
+    },
+    {
+      "id": "6336d6bc-5950-4ffc-8e25-22df90d167fa",
+      "timestamp": "2026-03-27T23:29:07.978Z",
+      "name": "apple",
+      "calories": 0,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0,
+      "source": "scan",
+      "image": "/uploads/2656f208-332d-447b-a238-9df85296afe0.jpg",
+      "meta": {
+        "vision": {
+          "foodName": "apple",
+          "confidence": 0.2,
+          "provider": "stub"
+        },
+        "nutrition": {
+          "error": "USDA search failed (403): {\n  \"error\": {\n    \"code\": \"API_KEY_INVALID\",\n    \"message\": \"An invalid api_key was supplied. Get one at https://api.nal.usda.gov:443\"\n  }\n}"
+        }
+      }
+    },
+    {
+      "id": "c5b97402-ba76-4b37-a27c-8fdba4e31cee",
+      "timestamp": "2026-03-27T23:26:24.018Z",
+      "name": "max",
+      "calories": 500,
+      "protein": 50,
+      "carbs": 0,
+      "fat": 0,
+      "source": "manual"
+    },
+    {
+      "id": "5fccc6d2-d97a-450d-a872-b8039ffa90dd",
+      "timestamp": "2026-03-27T23:10:21.787Z",
+      "name": "pizza",
+      "calories": 200,
+      "protein": 20,
+      "carbs": 0,
+      "fat": 0,
+      "source": "manual"
+    },
+    {
+      "id": "bd3c325f-db97-476c-bb03-4cbbf9763d52",
+      "timestamp": "2026-03-27T22:59:55.990Z",
+      "name": "Banana",
+      "calories": 100,
+      "protein": 5,
+      "carbs": 0,
+      "fat": 0,
+      "source": "manual"
+    },
+    {
       "id": "example-1",
       "timestamp": "2026-02-01T12:30:00.000Z",
       "name": "Greek yogurt (plain)",
@@ -17,11 +152,16 @@
       "source": "scan",
       "image": "/uploads/example.jpg",
       "meta": {
-        "vision": { "foodName": "chicken breast", "confidence": 0.5, "provider": "stub" },
-        "nutrition": { "source": "usda", "note": "example" }
+        "vision": {
+          "foodName": "chicken breast",
+          "confidence": 0.5,
+          "provider": "stub"
+        },
+        "nutrition": {
+          "source": "usda",
+          "note": "example"
+        }
       }
     }
   ]
 }
-
-

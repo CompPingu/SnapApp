@@ -1,26 +1,38 @@
 export type Meal = {
   id: string;
-  timestamp: string; // ISO
+  timestamp: string;
   name: string;
   calories: number;
   protein: number;
+  carbs: number;
+  fat: number;
   source: "manual" | "scan";
-  image?: string; // backend-relative path (/uploads/...)
+  image?: string;
 };
 
 export type Totals = {
   calories: number;
   protein: number;
+  carbs: number;
+  fat: number;
+};
+
+export type Goals = {
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
 };
 
 export type TodayResponse = {
-  date: string; // YYYY-MM-DD
+  date: string;
   totals: Totals;
   meals: Meal[];
+  goals: Goals;
 };
 
 export type HistoryDay = {
-  date: string; // YYYY-MM-DD
+  date: string;
   totals: Totals;
   meals: Meal[];
 };
@@ -29,5 +41,3 @@ export type HistoryResponse = {
   days: number;
   items: HistoryDay[];
 };
-
-

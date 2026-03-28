@@ -1,5 +1,5 @@
 import { API_URL } from "../config";
-import type { HistoryResponse, TodayResponse } from "./types";
+import type { Goals, HistoryResponse, Meal, TodayResponse } from "./types";
 
 async function http<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, init);
@@ -18,16 +18,41 @@ export async function fetchHistory(days = 14): Promise<HistoryResponse> {
   return await http<HistoryResponse>(`/api/history?days=${encodeURIComponent(String(days))}`);
 }
 
+export async function fetchGoals(): Promise<Goals> {
+  return await http<Goals>("/api/goals");
+}
+
+export async function saveGoals(goals: Goals): Promise<Goals> {
+  return await http<Goals>("/api/goals", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(goals)
+  });
+}
+
 export async function addMealManual(input: {
   name: string;
   calories: number;
   protein: number;
+  carbs: number;
+  fat: number;
   timestamp?: string;
 }) {
-  return await http<{ meal: any }>("/api/meals", {
+  return await http<{ meal: Meal }>("/api/meals", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input)
+  });
+}
+
+export async function updateMeal(
+  id: string,
+  updates: Partial<Pick<Meal, "name" | "calories" | "protein" | "carbs" | "fat">>
+) {
+  return await http<{ meal: Meal }>(`/api/meals/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updates)
   });
 }
 
@@ -37,14 +62,10 @@ export async function deleteMeal(id: string) {
 
 export async function scanFoodImage(image: { uri: string; name: string; type: string }) {
   const form = new FormData();
-  // React Native FormData expects a "file" object with uri/name/type.
   form.append("image", image as any);
 
-  return await http<{ meal: any; debug: any }>("/api/scan", {
+  return await http<{ meal: Meal; debug: any }>("/api/scan", {
     method: "POST",
     body: form
-    // NOTE: do not set Content-Type; fetch will set multipart boundary.
   });
 }
-
-

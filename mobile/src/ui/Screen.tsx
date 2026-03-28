@@ -1,30 +1,25 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, View, ViewStyle } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { theme } from "./theme";
 
 export function Screen({
   children,
-  style
+  style,
 }: {
   children: React.ReactNode;
   style?: ViewStyle;
 }) {
   return (
-    <LinearGradient colors={[theme.colors.bgTop, theme.colors.bgBottom]} style={styles.gradient}>
+    <View style={styles.bg}>
       <SafeAreaView style={styles.safe}>
         <View style={[styles.inner, style]}>{children}</View>
       </SafeAreaView>
-    </LinearGradient>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  gradient: { flex: 1 },
+  bg: { flex: 1, backgroundColor: theme.colors.bg },
   safe: { flex: 1 },
-  inner: { flex: 1 }
+  inner: { flex: 1 },
 });
-
-
-
-
