@@ -1,6 +1,179 @@
 {
   "meals": [
     {
+      "id": "cb34af9d-d967-4800-a09b-46d3f1ea7742",
+      "timestamp": "2026-04-11T03:14:08.260Z",
+      "name": "Mutton Curry with White Rice and Cucumber",
+      "calories": 850,
+      "protein": 45,
+      "carbs": 90,
+      "fat": 35,
+      "source": "scan",
+      "image": "/uploads/946332e5-bca9-4222-9382-3a9616b3a412.jpg",
+      "meta": {
+        "vision": {
+          "foodName": "Mutton Curry with White Rice and Cucumber",
+          "calories": 850,
+          "protein": 45,
+          "carbs": 90,
+          "fat": 35,
+          "provider": "gemini",
+          "model": "gemini-3-flash-preview"
+        }
+      }
+    },
+    {
+      "id": "a89ddc81-d89d-469d-8a81-96e7017ec650",
+      "timestamp": "2026-04-11T03:12:16.670Z",
+      "name": "Clear American Strawberry Flavored Sparkling Water",
+      "calories": 0,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0,
+      "source": "scan",
+      "image": "/uploads/0b180f83-2263-4bef-99b1-f85d6d93c537.jpg",
+      "meta": {
+        "vision": {
+          "foodName": "Clear American Strawberry Flavored Sparkling Water",
+          "calories": 0,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "provider": "gemini",
+          "model": "gemini-3-flash-preview"
+        }
+      }
+    },
+    {
+      "id": "54252f4e-4a9e-496e-bcfc-26d2fe69fb04",
+      "timestamp": "2026-04-11T03:11:14.375Z",
+      "name": "Mutton Curry with White Rice and Cucumber Slices",
+      "calories": 800,
+      "protein": 40,
+      "carbs": 75,
+      "fat": 35,
+      "source": "scan",
+      "image": "/uploads/9752d28c-ce76-4746-8f85-2574e07fb427.jpg",
+      "meta": {
+        "vision": {
+          "foodName": "Mutton Curry with White Rice and Cucumber Slices",
+          "calories": 800,
+          "protein": 40,
+          "carbs": 75,
+          "fat": 35,
+          "provider": "gemini",
+          "model": "gemini-3-flash-preview"
+        }
+      }
+    },
+    {
+      "id": "0687cb17-f322-4b7f-8617-f5a5d96f142f",
+      "timestamp": "2026-04-11T03:10:21.611Z",
+      "name": "No food items visible",
+      "calories": 0,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0,
+      "source": "scan",
+      "image": "/uploads/b6cda505-8ff1-4073-b39e-b55d5cbf1c50.jpg",
+      "meta": {
+        "vision": {
+          "foodName": "No food items visible",
+          "calories": 0,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "provider": "gemini",
+          "model": "gemini-3-flash-preview"
+        }
+      }
+    },
+    {
+      "id": "a9580c3d-1a63-466e-a8c1-14fbdfbe1570",
+      "timestamp": "2026-04-11T03:10:07.923Z",
+      "name": "No food items visible",
+      "calories": 0,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0,
+      "source": "scan",
+      "image": "/uploads/39fcad0a-752c-4e52-bf3d-f1fbadfb74c5.jpg",
+      "meta": {
+        "vision": {
+          "foodName": "No food items visible",
+          "calories": 0,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "provider": "gemini",
+          "model": "gemini-3-flash-preview"
+        }
+      }
+    },
+    {
+      "id": "bf109963-1301-4951-afad-0800e757e4d3",
+      "timestamp": "2026-04-11T03:04:48.459Z",
+      "name": "Unknown food",
+      "calories": 0,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0,
+      "source": "scan",
+      "image": "/uploads/f156a9af-08ff-4662-be98-431bf46215a0.jpg",
+      "meta": {
+        "vision": {
+          "foodName": "Unknown food",
+          "calories": 0,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "provider": "stub"
+        }
+      }
+    },
+    {
+      "id": "8a24ca52-c269-47ac-bab2-ac8836c7982a",
+      "timestamp": "2026-04-11T03:02:37.290Z",
+      "name": "Unknown food",
+      "calories": 0,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0,
+      "source": "scan",
+      "image": "/uploads/b862a533-c44a-428a-ba29-50d5dc58730e.jpg",
+      "meta": {
+        "vision": {
+          "foodName": "Unknown food",
+          "calories": 0,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "provider": "stub"
+        }
+      }
+    },
+    {
+      "id": "be83ab4d-b339-4f50-aeda-bc139242fa64",
+      "timestamp": "2026-04-11T03:00:47.164Z",
+      "name": "Unknown food",
+      "calories": 0,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0,
+      "source": "scan",
+      "image": "/uploads/84ba7d98-88d5-4045-be51-e7ed7e61748e.jpg",
+      "meta": {
+        "vision": {
+          "foodName": "Unknown food",
+          "calories": 0,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "provider": "stub"
+        }
+      }
+    },
+    {
       "id": "dae83170-7446-4ba0-8d25-9a857f73d75b",
       "timestamp": "2026-03-28T00:26:27.477Z",
       "name": "Unknown food",
