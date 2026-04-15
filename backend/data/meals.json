@@ -1,6 +1,72 @@
 {
   "meals": [
     {
+      "id": "a6c8f72c-d6a8-4ba7-a630-5b09b68cb7fa",
+      "timestamp": "2026-04-12T15:29:55.366Z",
+      "name": "6-inch Tuna Sub Sandwich with Spinach, Red Onions, and Green Bell Peppers",
+      "calories": 480,
+      "protein": 21,
+      "carbs": 44,
+      "fat": 25,
+      "source": "scan",
+      "image": "/uploads/cc1f7d9b-3b3b-4d2a-89b0-559d1a5ab5e5.jpg",
+      "meta": {
+        "vision": {
+          "foodName": "6-inch Tuna Sub Sandwich with Spinach, Red Onions, and Green Bell Peppers",
+          "calories": 480,
+          "protein": 21,
+          "carbs": 44,
+          "fat": 25,
+          "provider": "gemini",
+          "model": "gemini-3-flash-preview"
+        }
+      }
+    },
+    {
+      "id": "ef5dd551-fbe9-4d9a-8afe-e2d1431c152f",
+      "timestamp": "2026-04-11T20:04:15.279Z",
+      "name": "Fried Rice with Fried Chicken, Shrimp, and Mixed Vegetables",
+      "calories": 850,
+      "protein": 42,
+      "carbs": 90,
+      "fat": 35,
+      "source": "scan",
+      "image": "/uploads/483d97a8-0e13-4ca8-a957-7c44bbb5c5d0.jpg",
+      "meta": {
+        "vision": {
+          "foodName": "Fried Rice with Fried Chicken, Shrimp, and Mixed Vegetables",
+          "calories": 850,
+          "protein": 42,
+          "carbs": 90,
+          "fat": 35,
+          "provider": "gemini",
+          "model": "gemini-3-flash-preview"
+        }
+      }
+    },
+    {
+      "id": "e7bdf96d-2915-4d7b-9d32-a474a4c7779a",
+      "timestamp": "2026-04-11T15:12:20.509Z",
+      "name": "Two Slices of White Bread with Peanut Butter",
+      "calories": 530,
+      "protein": 21,
+      "carbs": 41,
+      "fat": 34,
+      "source": "scan",
+      "image": "/uploads/e4c8cf18-6472-4da8-a442-55191da42d19.jpg",
+      "meta": {
+        "vision": {
+          "foodName": "Two Slices of White Bread with Peanut Butter",
+          "calories": 530,
+          "protein": 21,
+          "carbs": 41,
+          "fat": 34,
+          "provider": "gemini",
+          "model": "gemini-3-flash-preview"
+        }
+      }
+    },
+    {
       "id": "cb34af9d-d967-4800-a09b-46d3f1ea7742",
       "timestamp": "2026-04-11T03:14:08.260Z",
       "name": "Mutton Curry with White Rice and Cucumber",
